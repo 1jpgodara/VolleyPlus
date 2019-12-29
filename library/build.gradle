@@ -3,6 +3,7 @@ buildscript {
         google()
         jcenter()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
@@ -21,11 +22,20 @@ apply plugin: 'com.jfrog.bintray'
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 }
 
 android {
     compileSdkVersion 28
+
+
+    defaultConfig {
+        minSdkVersion 14
+    }
+
     useLibrary 'org.apache.http.legacy'
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -49,21 +59,20 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
     task androidJavadocs(type: Javadoc) {
         source = android.sourceSets.main.java.srcDirs
         classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
+
     task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
         classifier = 'javadoc'
         from androidJavadocs.destinationDir
     }
+
     task androidSourcesJar(type: Jar) {
         classifier = 'sources'
         from android.sourceSets.main.java.sourceFiles
-    }
-
-    defaultConfig {
-        minSdkVersion 14
     }
 
     artifacts {
